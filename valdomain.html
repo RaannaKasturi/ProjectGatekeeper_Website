@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Domain Validation Form</title>
+    <style>
+        .text-danger {
+            display: none;
+            /* Hide error message initially */
+        }
+    </style>
+</head>
+
+<body>
+
+    <form>
+        <div class="col-md-12">
+            <label for="valdomain" class="form-label">Domains* [Separate each domain using commas ( , )]</label>
+            <input type="text" class="form-control" id="valdomain"
+                placeholder="domain.com, www.domain.com and/or *.domain.com" required />
+            <div id="domainHelp" class="form-text">
+                We don't store your domains or CSR or Private Key.
+                <strong>Note: </strong>
+                <i>For wildcard domain use: <strong>domain.com, *.domain.com </strong></i>
+            </div>
+            <div id="domainError" class="text-danger"></div> <!-- Error message will be shown here -->
+        </div>
+
+        <div class="col-12 mt-3 d-flex justify-content-center gap-5">
+            <button class="btn btn-outline-primary" type="reset">Reset Form</button>
+            <button class="btn btn-primary" type="submit">Submit form</button>
+        </div>
+    </form>
+
+    <script>
+        // Get the domain input and error message elements
+        const domainInput = document.getElementById('valdomain');
+        const domainError = document.getElementById('domainError');
+
+        // Function to validate domains
+        function validateDomains() {
+            const domains = domainInput.value.split(',').map(domain => domain.trim());
+            const domainPattern = /^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.[A-Za-z]{2,})+$/; // Regex for valid domains
+            const wildcardPattern = /^\*\.[A-Za-z0-9-]{1,63}(\.[A-Za-z]{2,})+$/; // Regex for wildcard domains
+
+            let isValid = true;
+            domainError.textContent = ''; // Clear previous error messages
+
+            for (let domain of domains) {
+                if (!domainPattern.test(domain) && !wildcardPattern.test(domain)) {
+                    isValid = false;
+                    domainError.textContent += `Invalid domain: ${domain}. Please enter valid domains. `;
+                }
+            }
+
+            return isValid;
+        }
+
+        // Add event listener to the form submission
+        document.querySelector('form').addEventListener('submit', function (event) {
+            if (!validateDomains()) {
+                event.preventDefault(); // Prevent form submission if validation fails
+                domainError.style.display = 'block'; // Show error message
+            } else {
+                domainError.style.display = 'none'; // Hide error message if valid
+            }
+        });
+
+        // Optional: Validate on input change for immediate feedback
+        domainInput.addEventListener('input', function () {
+            validateDomains();
+        });
+    </script>
+
+</body>
+
+</html>
