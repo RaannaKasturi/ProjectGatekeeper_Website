@@ -14,9 +14,9 @@
     <header class="sticky-top position-sticky border-bottom">
         <nav class="navbar navbar-expand-md bg-body-tertiary">
             <div class="container-fluid d-flex justify-content-between">
-                <div class="navbar-brand" href="#">
+                <div class="navbar-brand" href="./">
                     <i class="bi bi-shield-shaded"></i>
-                    <a class="navbar-brand" href="#">Project Gatekeeper</a>
+                    <a class="navbar-brand" href="./">Project Gatekeeper</a>
                 </div>
                 <div>
                     <button class="btn btn-outline-secondary navbar-toggler" data-bs-toggle="collapse"
@@ -28,18 +28,33 @@
                     </button>
                 </div>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarColor04">
-                    <ul class="navbar-nav nav-underline mx-auto d-flex d-md-none">
+                    <ul class="nav nav-underline navbar-nav mx-auto mt-4 d-flex d-md-none">
                         <li class="nav-item">
-                            <a class="nav-link active" href="./index.html">Home</a>
+                            <a class="nav-link" href="./index.html"><i class="bi bi-house-fill">&nbsp;</i>Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Order SSL</a>
+                            <a class="nav-link active link-primary" href="./gpkcsr.html"><i
+                                    class="bi bi-code-slash">&nbsp;</i>Create
+                                Private Key & CSR</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Pricing</a>
+                            <a class="nav-link" aria-current="page" href="#"><i class="bi bi-cart-plus">&nbsp;</i>Order
+                                SSL</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
+                            <a class="nav-link" href="#"><i class="bi bi-clipboard-check-fill">&nbsp;</i>Check SSL
+                                Integrity</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="bi bi-sliders">&nbsp;</i>Decode CSR & SSL
+                                Certificate</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"><i class="bi bi-shield-lock-fill">&nbsp;</i>Certificate Matcher</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link link-danger" href="#"><i class="bi bi-shield-fill-x">&nbsp;</i>Revoke
+                                Certificate</a>
                         </li>
                     </ul>
                     <hr />
@@ -51,7 +66,7 @@
                         </div>
                         <ul class="dropdown-menu dropdown-menu-start dropdown-menu-md-end">
                             <li><a class="dropdown-item" href="#">Profile</a></li>
-                            <li><a class="dropdown-item" href="#">Dashboard</a></li>
+                            <li><a class="dropdown-item" href="./gpkcsr.html">Dashboard</a></li>
                             <li>
                                 <hr class="dropdown-divider" />
                             </li>
@@ -72,14 +87,16 @@
                 <div class="mt-5"></div>
                 <ul class="nav nav-underline navbar-nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="./index.html">Home</a>
+                        <a class="nav-link" href="./index.html"><i class="bi bi-house-fill">&nbsp;</i>Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active text" aria-current="page" href="#"><i
-                                class="bi bi-cart-plus">&nbsp;</i>Order SSL</a>
+                        <a class="nav-link active link-primary" href="./gpkcsr.html"><i
+                                class="bi bi-code-slash">&nbsp;</i>Create
+                            Private Key & CSR</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-code-slash">&nbsp;</i>Create Private Key & CSR</a>
+                        <a class="nav-link" aria-current="page" href="#"><i class="bi bi-cart-plus">&nbsp;</i>Order
+                            SSL</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="bi bi-clipboard-check-fill">&nbsp;</i>Check SSL

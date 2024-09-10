@@ -72,9 +72,11 @@ function validateDomains() {
     const domainPattern = /^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.[A-Za-z]{2,})+$/; // Regex for valid domains
     const wildcardPattern = /^\*\.[A-Za-z0-9-]{1,63}(\.[A-Za-z]{2,})+$/; // Regex for wildcard domains
     let isValid = true;
-    domainError.textContent = ''; // Clear previous error messages
+    domainError.textContent = '';
     for (let domain of domains) {
-        if (!domainPattern.test(domain) && !wildcardPattern.test(domain)) {
+        if (!domain) {
+            continue;
+        } else if (!domainPattern.test(domain) && !wildcardPattern.test(domain)) {
             isValid = false;
             domainError.textContent += `Invalid domain: ${domain}. Please enter valid domains. `;
         }
@@ -83,10 +85,10 @@ function validateDomains() {
 }
 document.querySelector('form').addEventListener('submit', function (event) {
     if (!validateDomains()) {
-        event.preventDefault(); // Prevent form submission if validation fails
-        domainError.style.display = 'block'; // Show error message
+        event.preventDefault();
+        domainError.style.display = 'block';
     } else {
-        domainError.style.display = 'none'; // Hide error message if valid
+        domainError.style.display = 'none';
     }
 });
 domainInput.addEventListener('input', function () {
