@@ -4,81 +4,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test</title>
+    <title>Gradio Client Test</title>
+    <!-- Include the Gradio Client library from a CDN if available -->
+    <script type="module">
+        // Check if the CDN link for @gradio/Client is available
+        // Replace the following line with the actual CDN link if found
+        import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client@latest/dist/index.js"; // Example link, verify if it works
+
+        async function generate() {
+            try {
+                const client = await Client.connect("raannakasturi/generate");
+                const result = await client.predict("/privcsr", {
+                    domains_input: 'domain.com',
+                    email: 'admin@domain.com',
+                    key_type: 'rsa',
+                    key_size: '4096',
+                    key_curve: 'SECP256R1',
+                });
+                console.log(result.data);
+            } catch (error) {
+                console.error("Error during prediction:", error);
+            }
+        }
+        generate();
+    </script>
 </head>
 
 <body>
-    <p>
-        The `CRLReason` enumeration defines various reasons for revoking a digital certificate. Each reason indicates a
-        specific scenario that necessitates the revocation. Here’s a detailed explanation of each reason:
-    </p>
-    <div>
-        <h3>1. Unspecified (0)</h3>
-        <p>
-            This reason is used when the revocation does not fall into any of the other specified categories. It may be
-            employed when the exact cause of revocation is not disclosed or is not applicable to the defined reasons.
-        </p>
-    </div>
-    <div>
-        <h3>2. Key Compromise (1)</h3>
-        <p>
-            This reason indicates that the private key associated with the certificate has been compromised. The
-            compromise could be due to theft, loss, or unauthorized access. When this occurs, the certificate authority
-            (CA) must revoke the certificate immediately to prevent misuse of the compromised key. The CA is also
-            expected to update the revocation date to reflect when the compromise was determined, even if it predates
-            the revocation request.</p>
-    </div>
-    <div>
-        <h3>3. CA Compromise</h3>
-        <p>
-            This reason is used when the certificate authority's private key has been compromised. If a CA's key is
-            compromised, all certificates issued by that CA may be considered untrustworthy, and the CA must revoke
-            those certificates to maintain the integrity of the trust chain.</p>
-    </div>
-    <div>
-        <h3>4. Affiliation Changed (3)</h3>
-        <p>
-            This reason applies when the subject's name or identity information in the certificate has changed, but
-            there is no suspicion of key compromise. It is typically used when the certificate subscriber requests
-            revocation due to changes in their organization or other identity-related information.</p>
-    </div>
-    <div>
-        <h3>5. Superseded (4)</h3>
-        <p>
-            This reason is used when a certificate has been replaced by a newer certificate. The newer certificate may
-            contain updated information or enhanced security features. The superseded certificate is revoked to prevent
-            confusion and ensure that only the latest certificate is in use.
-        </p>
-    </div>
-    <div>
-        <h3>6. Cessation of Operation (5)</h3>
-        <p>
-            This reason indicates that the certificate subscriber has ceased operations. This could apply to
-            organizations that are no longer in business or have stopped using the services for which the certificate
-            was issued. Revocation ensures that the certificate cannot be misused after the organization has closed.
-        </p>
-    </div>
-    <div>
-        <h3>7. Certificate Hold (6)</h3>
-        <p>
-            This reason is used when a certificate is temporarily put on hold. This could be due to a pending
-            investigation or verification process. While on hold, the certificate is not considered valid for use, but
-            it may be reinstated later if the issues are resolved.
-        </p>
-    </div>
-    <div>
-        <h3>8. Remove from CRL (8)</h3>
-        <p>
-            This reason is used to indicate that a certificate is being removed from the Certificate Revocation List
-            (CRL) for reasons other than those specified above. It may be used in cases where a certificate was revoked
-            in error or has been re-evaluated and found to be valid.
-        </p>
-    </div>
-    <div>
-        <h3>10. AA Compromise (10)</h3>
-        <p>
-            This reason indicates that the authority that issued the certificate (such as an issuing authority or a
-            subordinate CA) has been compromised. Similar to CA compromise, this can affect the trustworthiness of
-            certificates issued by that authority.
-        </p>
-    </div>
+    <h1>Gradio Client Example</h1>
+    <p>Check the console for output.</p>
+</body>
+
+</html>

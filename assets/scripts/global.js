@@ -39,3 +39,32 @@ function backToTop() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
 }
+
+// Copy function using Clipboard API
+function copyText(copyId) {
+    const textArea = document.getElementById(copyId);
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(textArea.value)
+            .then(() => {
+                alert('Text copied to clipboard!');
+            })
+            .catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+    } else {
+        // Fallback for older browsers
+        textArea.select();
+        document.execCommand('copy');
+        alert('Text copied to clipboard (using execCommand fallback).');
+    }
+}
+
+// Download function
+function downloadText(filename) {
+    const textArea = document.getElementById('csrdata').value;
+    const blob = new Blob([textArea], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+}
