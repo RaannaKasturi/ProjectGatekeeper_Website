@@ -23519,3 +23519,7 @@ fieldset:disabled .btn {
   text-align: center;
   font-size: 24px;
 }
+
+.spacer {
+  height: 150px;
+}
