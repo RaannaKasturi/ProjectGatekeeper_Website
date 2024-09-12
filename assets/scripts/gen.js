@@ -1,12 +1,11 @@
-const keyTypeSelect = document.getElementById('valkeytype');
-const domainInput = document.getElementById('valdomain');
-const emailInput = document.getElementById('valemail')
-const keySize = document.getElementById('valkeysize')
-const keyCurve = document.getElementById('valkeycurve')
-
-import { Client } from "http://cdn.jsdelivr.net/npm/@gradio/client@latest/dist/index.js"; // Example link, verify if it works
+import { Client } from "./../../node_modules/@gradio/client/dist/index.js";
 
 async function generate() {
+    const keyTypeSelect = document.getElementById('valkeytype');
+    const domainInput = document.getElementById('valdomain');
+    const emailInput = document.getElementById('valemail')
+    const keySize = document.getElementById('valkeysize')
+    const keyCurve = document.getElementById('valkeycurve')
     try {
         const client = await Client.connect("raannakasturi/generate");
         const result = await client.predict("/privcsr", {
@@ -21,5 +20,4 @@ async function generate() {
         console.error("Error during prediction:", error);
     }
 }
-// if clicked on button with id='generatepvtcsr' execute function generate()
-// document.getElementById('generatepvtcsr').addEventListener('click', generate);
+document.getElementById('generatepvtcsr').addEventListener('click', generate);

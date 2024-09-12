@@ -1,3 +1,5 @@
+import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
+
 const keyTypeSelect = document.getElementById('valkeytype');
 const keySizeDiv = document.getElementById('keysize');
 const keyCurveDiv = document.getElementById('keycurve');
@@ -44,3 +46,25 @@ document.querySelector('form').addEventListener('submit', function (event) {
 domainInput.addEventListener('input', function () {
     validateDomains();
 });
+
+// generate pvtcsr
+async function generate(event) {
+    event.preventDefault(); // Prevent default form submission
+    const domain = document.getElementById('valdomain').value;
+    const email = document.getElementById('valemail').value;
+    const keyType = document.getElementById('valkeytype').value;
+    const keySize = document.getElementById('valkeysize').value;
+    const keyCurve = document.getElementById('valkeycurve').value;
+    const button = document.getElementById('generatebtn');
+    const client = await Client.connect("raannakasturi/generate");
+    const result = await client.predict("/privcsr", {
+        domains_input: domain,
+        email: email,
+        key_type: keyType,
+        key_size: keySize,
+        key_curve: keyCurve,
+    });
+    document.getElementById('privatekeydata').textContent = result.data[0];
+    document.getElementById('csrdata').textContent = result.data[1];
+}
+document.getElementById('generate').addEventListener('submit', generate);
