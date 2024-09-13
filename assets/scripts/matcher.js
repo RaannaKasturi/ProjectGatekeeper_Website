@@ -18,7 +18,7 @@ async function matcher(event) {
     const result = await get_data(csrpvt, ssl)
     console.log(result.data[0]);
     console.log(typeof(result.data[0]));
-    if (result.data[0] === 'CSR match SSL' || result.data === 'Private Key match SSL') {
+    if (result.data[0] === 'CSR match SSL' || result.data[0] === 'Private Key match SSL') {
         document.getElementById('matchstatus').classList.add('border-success')
     } else {
         document.getElementById('matchstatus').classList.add('border-danger')
