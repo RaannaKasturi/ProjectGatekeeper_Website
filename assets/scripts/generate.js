@@ -56,7 +56,7 @@ async function generate(event) {
     const keySize = document.getElementById('valkeysize').value;
     const keyCurve = document.getElementById('valkeycurve').value;
     const button = document.getElementById('generatebtn');
-    const client = await Client.connect("raannakasturi/generate");
+    const client = await Client.connect("raannakasturi/generate-pvt-csr");
     const result = await client.predict("/privcsr", {
         domains_input: domain,
         email: email,
