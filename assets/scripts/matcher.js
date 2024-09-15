@@ -15,15 +15,32 @@ async function matcher(event) {
     event.preventDefault(); // Prevent default form submission
     const csrpvt = document.getElementById('csrpvt').value;
     const ssl = document.getElementById('ssl').value;
+    const decode = document.getElementById('decode');
+    const matchstatus = document.getElementById('matchstatus');
+    decode.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Decoding & Matching...';
+    decode.classList.add('disabled');
+    decode.classList.add('placeholder');
+    decode.classList.add('placeholder-wave');
+    matchstatus.value = 'Decoding & Matching...';
+    matchstatus.classList.add('placeholder');
+    matchstatus.classList.add('placeholder-wave');
+    matchstatus.classList.remove('border-success');
+    matchstatus.classList.remove('border-danger');
     const result = await get_data(csrpvt, ssl)
     console.log(result.data[0]);
     console.log(typeof(result.data[0]));
     if (result.data[0] === 'CSR match SSL' || result.data[0] === 'Private Key match SSL') {
-        document.getElementById('matchstatus').classList.add('border-success')
+        matchstatus.classList.add('border-success')
     } else {
-        document.getElementById('matchstatus').classList.add('border-danger')
+        matchstatus.classList.add('border-danger')
     }
-    document.getElementById('matchstatus').textContent = result.data;
+    matchstatus.value = result.data;
+    decode.innerHTML = 'Decode & Match';
+    decode.classList.remove('disabled');
+    decode.classList.remove('placeholder');
+    decode.classList.remove('placeholder-wave');
+    matchstatus.classList.remove('placeholder');
+    matchstatus.classList.remove('placeholder-wave');
 }
 document.getElementById('match').addEventListener('submit', matcher);
 

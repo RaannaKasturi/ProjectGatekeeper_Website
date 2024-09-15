@@ -56,6 +56,18 @@ async function generate(event) {
     const keySize = document.getElementById('valkeysize').value;
     const keyCurve = document.getElementById('valkeycurve').value;
     const button = document.getElementById('generatebtn');
+    const pvtkeydata = document.getElementById('privatekeydata');
+    const csrdata = document.getElementById('csrdata')
+    button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
+    button.classList.add('disabled');
+    button.classList.add('placeholder');
+    button.classList.add('placeholder-wave');
+    pvtkeydata.textContent = 'Generating Private Key...';
+    csrdata.textContent = 'Generating CSR...';
+    pvtkeydata.classList.add('placeholder');
+    csrdata.classList.add('placeholder');
+    pvtkeydata.classList.add('placeholder-wave');
+    csrdata.classList.add('placeholder-wave');
     const client = await Client.connect("raannakasturi/generate-pvt-csr");
     const result = await client.predict("/privcsr", {
         domains_input: domain,
@@ -64,7 +76,15 @@ async function generate(event) {
         key_size: keySize,
         key_curve: keyCurve,
     });
-    document.getElementById('privatekeydata').textContent = result.data[0];
-    document.getElementById('csrdata').textContent = result.data[1];
+    pvtkeydata.textContent = result.data[0];
+    csrdata.textContent = result.data[1];
+    button.innerHTML = 'Generate';
+    button.classList.remove('disabled');
+    button.classList.remove('placeholder');
+    button.classList.remove('placeholder-wave');
+    pvtkeydata.classList.remove('placeholder');
+    csrdata.classList.remove('placeholder');
+    pvtkeydata.classList.remove('placeholder-wave');
+    csrdata.classList.remove('placeholder-wave');
 }
 document.getElementById('generate').addEventListener('submit', generate);

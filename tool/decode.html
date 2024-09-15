@@ -37,12 +37,12 @@
                                 Tools</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active link-primary" href="/tool/generate.html"><i
-                                    class="bi bi-code-slash">&nbsp;</i>
+                            <a class="nav-link" href="/tool/generate.html"><i class="bi bi-code-slash">&nbsp;</i>
                                 Create Private Key & CSR</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/tool/decode.html"><i class="bi bi-sliders">&nbsp;</i> Decode CSR
+                            <a class="nav-link active link-primary" href="/tool/decode.html"><i
+                                    class="bi bi-sliders">&nbsp;</i> Decode CSR
                                 & SSL Certificate</a>
                         </li>
                         <li class="nav-item">
@@ -101,12 +101,12 @@
                             Tools</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active link-primary" href="/tool/generate.html"><i
-                                class="bi bi-code-slash">&nbsp;</i>
+                        <a class="nav-link" href="/tool/generate.html"><i class="bi bi-code-slash">&nbsp;</i>
                             Create Private Key & CSR</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/tool/decode.html"><i class="bi bi-sliders">&nbsp;</i> Decode CSR
+                        <a class="nav-link active link-primary" href="/tool/decode.html"><i
+                                class="bi bi-sliders">&nbsp;</i> Decode CSR
                             & SSL Certificate</a>
                     </li>
                     <li class="nav-item">
@@ -129,32 +129,31 @@
                 </ul>
             </div>
             <!-- Content -->
-            <div class="content col-md-9 col-lg-10 p-4 min-vh-100">
+            <div class="col-md-9 col-lg-10 p-4 min-vh-100">
                 <div class="row text-center mt-3 mb-5">
-                    <h1>Create Private Key & CSR</h1>
-                    <p>Generate free Private Keys and CSR (Certificate Signing Request).<br><i>We understand your
-                            concerns. And so, we don't store your Private Key or CSR.</i></p>
+                    <h1>SSL Certificate Decoder</h1>
+                    <p>Use the CSR & Certificate Decoder to find out what information is in your certificate.</p>
                 </div>
-                <form class="mt-auto" id="generate">
-                    <div class="row g-3" id="generate">
-                        <div class="row m-0">
+                <form class="mt-auto" id="decodessl">
+                    <div class="row g-3">
+                        <div class="row m-0 d-flex justify-content-center">
                             <div class="col-12 col-lg-6 mt-3">
-                                <label for="ssl" class="form-label">Enter Privste Key/CSR/SSL Certificate*</label>
+                                <label for="sslcsrpvt" class="form-label">Enter SSL Certificate*</label>
                                 <div class="input-group">
                                     <div class="input-group">
-                                        <textarea class="form-control" id="ssl" name="ssl" rows="10"
+                                        <textarea class="form-control" id="sslcsrpvt" name="sslcsrpvt" rows="10"
                                             placeholder="Enter your SSL Certificate here or upload the file below."
                                             required></textarea>
                                     </div>
                                     <div class="input-group my-3">
-                                        <input type="file" class="form-control" id="sslupload">
-                                        <label class="input-group-text" for="sslupload">Upload File</label>
+                                        <input type="file" class="form-control" id="fileupload">
+                                        <label class="input-group-text" for="fileupload">Upload File</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-12 mt-3 d-flex justify-content-center gap-5">
                                 <button class="btn btn-outline-primary" type="reset">Reset Form</button>
-                                <button class="btn btn-primary" type="submit" id="generatebtn">Generate</button>
+                                <button class="btn btn-primary" type="submit" id="decode">Decode</button>
                             </div>
                         </div>
                 </form>
@@ -168,18 +167,263 @@
                     <div class="d-flex flex-column w-25"></div>
                 </div>
                 <!-- Output -->
-                <div class="row g-3">
-
+                <div class="row table-responsive mx-auto d-flex justify-content-center" id="output">
+                    <div class="col-md-8 col-12 align-self-center text-center mb-5">
+                        <label for="status" class="form-label">Status</label>
+                        <input type="text" class="form-control text-center" id="matchstatus" readonly>
+                    </div>
+                    <!-- General Data -->
+                    <div class="d-flex d-none row" id="general_info">
+                        <h3 class="text-center text-decoration-underline">General Data</h3>
+                        <table class="table table-hover my-3">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-2 col-3 text-center">
+                                        <h4>Parameters</h4>
+                                    </th>
+                                    <th class="col-md-10 col-9 text-center">
+                                        <h4>Data</h4>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <tr>
+                                    <td>
+                                        <h5>Common Name</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="common_name">
+                                            </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>SANs</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="sans">
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>Not Valid Before</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="not_valid_before">
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>Not Valid After</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="not_valid_after">
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>Expires on</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="expiry">
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>Key Type</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="key_type">
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>Key Size</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="key_size">
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>Signature Algorithm</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="signature_algorithm">
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>Serial Number</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="serial_number">
+                                        </h5>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Issuer's Info -->
+                    <div class="d-flex d-none row" id="issuer_info">
+                        <h3 class="text-center text-decoration-underline my-3">Issuer Data</h3>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-2 col-3 text-center">
+                                        <h4>Parameters</h4>
+                                    </th>
+                                    <th class="col-md-10 col-9 text-center">
+                                        <h4>Data</h4>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <tr>
+                                    <td>
+                                        <h5>Issuer</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="issuer"></h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>Organization</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="organization">
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>Country</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="country">
+                                        </h5>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Extensions Info -->
+                    <div class="d-flex d-none row" id="x509_extenstions_info">
+                        <h3 class="text-center text-decoration-underline my-3">x509v3 Extensions Data</h3>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-2 col-3 text-center">
+                                        <h4>Parameters</h4>
+                                    </th>
+                                    <th class="col-md-10 col-9 text-center">
+                                        <h4>Data</h4>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <tr>
+                                    <td>
+                                        <h5>Authority Key Identifier</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="authorityKeyIdentifier">
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>Subject Key Identifier</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="subjectKeyIdentifier">
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>Key Usage</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="key_usage">
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>Extented Key Usage</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="extended_key_usage">
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>CRL Distribution Points</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="crl_distribution_points">
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>OCSP URL</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="ocsp_url">
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>CA Issuer URL</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="ca_issuer_url">
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>Subject Alt Name</h5>
+                                    </td>
+                                    <td>
+                                        <h5 id="subject_alt_name">
+                                        </h5>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="my-5 d-flex d-none row" id="rawssl">
+                        <h3 class="text-center text-decoration-underline">Raw OpenSSL Data</h3>
+                        <textarea name="raw_openssl_data" id="raw_openssl_data" class="form-control overflow-y-scroll"
+                            rows="15" readonly></textarea>
+                    </div>
+                    <div class="my-5 d-flex d-none row" id="asn1parsed">
+                        <h3 class="text-center text-decoration-underline">Raw OpenSSL Data</h3>
+                        <textarea name="openssl_asn1parse_data" id="openssl_asn1parse_data"
+                            class="form-control overflow-y-scroll" rows="15" readonly></textarea>
+                    </div>
+                </div>
+                <!-- Separator -->
+                <div class="spacer" id="features">
                 </div>
             </div>
-            <!-- Separator -->
-            <div class="spacer" id="features">
-            </div>
-        </div>
-        <!-- Back to TOP Button -->
-        <button type="button" class="btn btn-info btn-floating" id="btn-back-to-top">
-            <i class="bi bi-arrow-up-circle"> </i>
-        </button>
+            <!-- Back to TOP Button -->
+            <button type="button" class="btn btn-info btn-floating" id="btn-back-to-top">
+                <i class="bi bi-arrow-up-circle"> </i>
+            </button>
     </main>
     <footer class="bg-body-tertiary align-bottom">
         <div class="container-fluid border-top d-flex flex-column justify-content-center">

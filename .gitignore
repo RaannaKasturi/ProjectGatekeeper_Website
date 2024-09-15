@@ -1,2 +1,5 @@
 test*
 testing*
+node_modules*
+package*
+backend*
