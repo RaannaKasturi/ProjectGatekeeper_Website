@@ -16,7 +16,7 @@
             <div class="container-fluid d-flex justify-content-between">
                 <div class="navbar-brand" href="/">
                     <i class="bi bi-shield-shaded"></i>
-                    <a class="navbar-brand" href="/">Project<br>Gatekeeper</a>
+                    <a class="navbar-brand" href="/">Project <br class="d-flex d-md-none">Gatekeeper</a>
                 </div>
                 <div>
                     <button class="btn btn-outline-secondary navbar-toggler" data-bs-toggle="collapse"
@@ -135,34 +135,45 @@
                     <p>Order Professional SSL Certificate from top SSL Providers like Let's Encrypt, Google Trust,
                         SSL.com, BuySSL, etc.</p>
                 </div>
-                <div class="mt-auto">
-                    <form class="row g-3" id="pkcsr-form">
+                <div>
+                    <script type="module" src="https://gradio.s3-us-west-2.amazonaws.com/4.41.0/gradio.js"></script>
+
+                    <gradio-app src="https://raannakasturi-project-gatekeeper.hf.space"></gradio-app>
+
+                </div>
+                <div class="mt-auto d-flex row d-none">
+                    <form class="row g-3 " id="pkcsr-form">
                         <div class="row">
                             <div class="col-md-12">
-                                <label for="valdomain" class="form-label">Domains* [Separate each domain using commas
+                                <label for="domains" class="form-label">Domains* [Separate each domain using commas
                                     ( , )]</label>
-                                <input type="text" class="form-control" id="valdomain"
+                                <input type="text" class="form-control" id="domains"
                                     placeholder="domain.com, www.domain.com and/or *.domain.com" required />
                                 <div class="text-danger" id="domainError"></div>
-                                <div id="domainHelp" class="form-text">We don't store your domains or CSR or Private
-                                    Key. <strong>Note: </strong><i>For wildcard domain use: <strong>domain.com,
-                                            *.domain.com </strong></i>
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="checkbox" value="" id="wildcard" />
+                                    <label class="form-check-label" for="wildcard"> Wildcard SSL Certificate (
+                                        *.domain.com )</label>
+                                    </label>
                                 </div>
+                            </div>
+                            <div class="col my-3">
+                                <label for="email" class="form-label">Email ID</label>
+                                <input type="email" class="form-control" id="email" placeholder="admin@domain.com"
+                                    required />
+                                <div class="text-danger" id="emailError"></div>
                             </div>
                             <div class="mt-md-0 mt-3">
                                 <div class="row">
                                     <div class="col">
-                                        <label for="generate" class="form-label mt-md-0 mt-3">Generate*</label>
-                                        <select class="form-select" id="generate">
-                                            <option selected value="pkcsr">Private Key & CSR</option>
-                                            <option value="pk">Private Key</option>
-                                            <option value="csr">CSR</option>
+                                        <label for="provider" class="form-label mt-md-0 mt-3">SSL Provider*</label>
+                                        <select class="form-select" id="provider">
+                                            <option selected value="Let's Encrypt">Let's Encrypt</option>
+                                            <option value="Google">Google Trust</option>
+                                            <option value="Buypass" id="buypass">BuyPass</option>
+                                            <option value="ZeroSSL">ZeroSSL</option>
+                                            <option value="SSL.com">SSL.com</option>
                                         </select>
-                                        <div class="form-check mt-2" id="customcsrdiv">
-                                            <input class="form-check-input" type="checkbox" value="" id="customcsr" />
-                                            <label class="form-check-label" for="customcsr">Custom CSR
-                                            </label>
-                                        </div>
                                     </div>
                                     <div class="col">
                                         <label for="valkeytype" class="form-label">Key Type*</label>
@@ -186,7 +197,7 @@
                                             <label for="valkeycurve" class="form-label">Key Curve</label>
                                             <select class="form-select" id="valkeycurve">
                                                 <option selected value="SECP256R1">ECC-256</option>
-                                                <option value="SECP384R1">ECC-384</option>
+                                                <option value="SECP384R1" id="ecc384">ECC-384</option>
                                             </select>
                                             <div id="keysizeHelp" class="form-text">We recommend using ECC-256 Key Size
                                                 for easier processing and more providers.
@@ -195,60 +206,78 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- domains, email, common_name, country, state, locality, organization, organization_unit -->
-                            <div class="row visually-hidden disable" id="customcsrdata">
-                                <div>
-                                    <div class="col-md-6">
-                                        <label for="valemail" class="form-label">Email ID*</label>
-                                        <input type="email" class="form-control" id="valemail" />
-                                    </div>
-                                </div>
-                                <div class="col-md-4 mt-3">
-                                    <label for="valcn" class="form-label">Common Name*</label>
-                                    <input type="text" class="form-control" id="valcn" />
-                                </div>
-                                <div class="col-md-4 mt-3">
-                                    <label for="valorg" class="form-label">Organization*</label>
-                                    <input type="text" class="form-control" id="valorg" />
-                                </div>
-                                <div class="col-md-4 mt-3">
-                                    <label for="valorgu" class="form-label">Organization Unit*</label>
-                                    <input type="text" class="form-control" id="valorgu" />
-                                </div>
-                                <div class="col-md-4 mt-3">
-                                    <label for="valcountry" class="form-label">Country*</label>
-                                    <input type="text" class="form-control" id="valcountry" />
-                                </div>
-                                <div class="col-md-4 mt-3">
-                                    <label for="valstate" class="form-label">State*</label>
-                                    <input type="text" class="form-control" id="valstate" />
-                                </div>
-                                <div class="col-md-4 mt-3">
-                                    <label for="valloc" class="form-label">Locality*</label>
-                                    <input type="text" class="form-control" id="valloc" />
-                                </div>
-                            </div>
                             <div class="col-12 mt-5 d-flex justify-content-center">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck2"
-                                        required />
-                                    <label class="form-check-label" for="invalidCheck2"> Agree to terms and conditions*
+                                    <input class="form-check-input" type="checkbox" value="" id="TOCs" required />
+                                    <label class="form-check-label" for="TOCs"> Agree to terms and conditions <a
+                                            href="#" target="_blank" rel="noopener noreferrer">our's</a> &
+                                        <a href="#" target="_blank" id="providertocs"
+                                            rel="noopener noreferrer">provider's</a>*
                                     </label>
                                 </div>
                             </div>
                             <div class="col-12 mt-3 d-flex justify-content-center gap-5">
                                 <button class="btn btn-outline-primary" type="reset">Reset Form</button>
-                                <button class="btn btn-primary" type="submit">Submit form</button>
+                                <button class="btn btn-primary" type="submit" id="order">Submit form</button>
                             </div>
                         </div>
                     </form>
+                    <!-- Separator -->
+                    <div class="d-flex flex-row align-content-center flex-wrap justify-content-between mt-5 my-auto"
+                        id="features">
+                        <div class="d-flex flex-column w-25"></div>
+                        <div class="d-flex flex-column w-50 align-self-center">
+                            <hr>
+                        </div>
+                        <div class="d-flex flex-column w-25"></div>
+                    </div>
+                    <!-- Output -->
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-4 mt-3 px-2">
+                            <label for="privatekeydata" class="form-label">Private Key</label>
+                            <textarea class="form-control overflow-y-scroll" id="privatekeydata" name="privatekeydata"
+                                rows="10" placeholder="Private key will be displayed here." readonly></textarea>
+                            <div class="col-12 mt-3 d-flex justify-content-center gap-5">
+                                <button class="btn btn-clipboard btn-outline-primary copy"
+                                    data-clipboard-target="#privatekeydata" onclick="copyText('privatekeydata')">Copy
+                                    Private Key</button>
+                                <button class="btn btn-primary" onclick="downloadText('privatekey.key')">Download
+                                    Private Key</button>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-4 mt-3 px-2">
+                            <label for="csrdata" class="form-label">CSR</label>
+                            <textarea class="form-control overflow-y-scroll" id="csrdata" name="csrdata" rows="10"
+                                placeholder="CSR will be displayed here." readonly></textarea>
+                            <div class="col-12 mt-3 d-flex justify-content-center gap-5">
+                                <button class="btn btn-clipboard btn-outline-primary copy"
+                                    data-clipboard-target="#csrdata" onclick="copyText('csrdata')">Copy CSR</button>
+                                <button class="btn btn-primary" onclick="downloadText('domain.csr')">Download
+                                    CSR</button>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-4 mt-3 px-2">
+                            <label for="ssldata" class="form-label">CSR</label>
+                            <textarea class="form-control overflow-y-scroll" id="ssldata" name="ssldata" rows="10"
+                                placeholder="CSR will be displayed here." readonly></textarea>
+                            <div class="col-12 mt-3 d-flex justify-content-center gap-5">
+                                <button class="btn btn-clipboard btn-outline-primary copy"
+                                    data-clipboard-target="#ssldata" onclick="copyText('ssldata')">Copy SSL
+                                    Certificate</button>
+                                <button class="btn btn-primary" onclick="downloadText('certificate.crt')">Download
+                                    SSL Certificate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Separator -->
+                <div class="spacer" id="features">
                 </div>
             </div>
+            <!-- Separator -->
+            <div class="spacer" id="features">
+            </div>
         </div>
-        <!-- Back to TOP Button -->
-        <button type="button" class="btn btn-info btn-floating" id="btn-back-to-top">
-            <i class="bi bi-arrow-up-circle"> </i>
-        </button>
     </main>
     <footer class="bg-body-tertiary">
         <div class="container-fluid border-top d-flex flex-column justify-content-center">
@@ -430,7 +459,7 @@
         </div>
     </footer>
     <!-- Scripts -->
-    <script src="/assets/scripts/generate.js"></script>
+    <script src="/assets/scripts/order.js"></script>
     <script src="/assets/scripts/global.js"></script>
     <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">

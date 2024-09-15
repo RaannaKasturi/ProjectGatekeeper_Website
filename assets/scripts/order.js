@@ -3,11 +3,17 @@ import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.m
 const keyTypeSelect = document.getElementById("valkeytype");
 const keySizeDiv = document.getElementById("keysize");
 const keyCurveDiv = document.getElementById("keycurve");
-const domainInput = document.getElementById("valdomain");
-const emailInput = document.getElementById("valemail");
+const keycurve = document.getElementById("valkeycurve");
+const domainInput = document.getElementById("domains");
+const emailInput = document.getElementById("email");
 const domainError = document.getElementById("domainError");
 const emailError = document.getElementById("emailError");
-const generatebtn = document.getElementById("generatebtn");
+const generatebtn = document.getElementById("order");
+const provider = document.getElementById("provider");
+const wildcard = document.getElementById("wildcard");
+const ecc384 = document.getElementById("ecc384");
+const buypass = document.getElementById("buypass");
+const providertocs = document.getElementById("providertocs");
 
 // Key Type Select
 keyTypeSelect.addEventListener("change", function () {
@@ -39,8 +45,6 @@ function validateDomains() {
   }
   if (isValid) {
     generatebtn.classList.remove("disabled");
-  } else {
-    generatebtn.classList.add("disabled");
   }
   return isValid;
 }
@@ -56,7 +60,6 @@ document.querySelector("form").addEventListener("submit", function (event) {
 });
 domainInput.addEventListener("input", function () {
   validateDomains();
-  validateEmails();
 });
 
 // Function to validate emails
@@ -101,10 +104,58 @@ document.querySelector("form").addEventListener("submit", function (event) {
   }
 });
 emailInput.addEventListener("input", function () {
-  validateEmails(); // Validate emails on input change
+  validateEmails();
 });
 
-// generate pvtcsr
+// Function for Buypass provider
+function removeecc() {
+  ecc384.setAttribute("disabled", true);
+  ecc384.textContent = "ECC-384 (Disabled)";
+  wildcard.setAttribute("disabled", true); // Disable the wildcard option
+  wildcard.checked = false; // Uncheck the wildcard checkbox if it was selected
+}
+function enableecc() {
+  ecc384.removeAttribute("disabled");
+  ecc384.textContent = "ECC-384"; // Set the default value for ECC
+  const wildcard = document.getElementById("wildcard");
+  wildcard.removeAttribute("disabled"); // Enable wildcard checkbox
+}
+provider.addEventListener("change", function () {
+  if (this.value === "bp") {
+    removeecc(); // Disable options for BuyPass provider
+  } else {
+    enableecc(); // Enable options for other providers
+  }
+});
+
+//funtion to disable buypass as provider when wildcard is on or ECC-384 is selected
+function disablebuypass() {
+  buypass.setAttribute("disabled", true);
+  buypass.textContent = "BuyPass (Disabled)";
+}
+function enablebuypass() {
+  buypass.removeAttribute("disabled");
+  buypass.textContent = "BuyPass";
+}
+document.getElementById("wildcard").addEventListener("change", function () {
+  if (this.checked) {
+    disablebuypass();
+  } else {
+    enablebuypass(); // Re-enable BuyPass if wildcard is unchecked
+  }
+});
+
+// Disable BuyPass if ECC-384 is selected
+document.getElementById("valkeycurve").addEventListener("change", function () {
+  if (this.value === "SECP384R1") {
+    // ECC-384 selected
+    disablebuypass();
+  } else {
+    enablebuypass(); // Re-enable BuyPass if another curve is selected
+  }
+});
+
+// order ssl
 async function generate(event) {
   event.preventDefault(); // Prevent default form submission
   const domain = document.getElementById("valdomain").value;
