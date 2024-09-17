@@ -40,22 +40,18 @@ function validateDomains() {
     } else if (!domainPattern.test(domain) && !wildcardPattern.test(domain)) {
       isValid = false;
       domainError.textContent += `Invalid domain: ${domain}. Please enter valid domains. `;
-      generatebtn.classList.add("disabled");
     }
   }
   if (isValid) {
-    generatebtn.classList.remove("disabled");
   }
   return isValid;
 }
 document.querySelector("form").addEventListener("submit", function (event) {
   if (!validateDomains()) {
     event.preventDefault();
-    generatebtn.classList.add("disabled");
     domainError.style.display = "block";
   } else {
     domainError.style.display = "none";
-    generatebtn.classList.remove("disabled");
   }
 });
 domainInput.addEventListener("input", function () {
@@ -89,9 +85,7 @@ function validateEmails() {
     }
   }
   if (isValid) {
-    generatebtn.classList.remove("disabled");
   } else {
-    generatebtn.classList.add("disabled");
   }
   return isValid;
 }
@@ -202,22 +196,21 @@ async function get_cnames(domains) {
   const client = await Client.connect("raannakasturi/gencname");
   const result = await client.predict("/get_cnames", {
     i_domains: domains,
+    wildcard: wildcard.checked,
   });
   return result;
 }
 
 async function generatecnames(event) {
   event.preventDefault(); // Prevent the form from submitting and reloading the page
-
+  generatebtn.classList.add("disabled");
   // Clear existing rows in the table
   const tableHead = document.querySelector("#resultTable thead");
   const tableBody = document.querySelector("#resultTable tbody");
-  const copyMessage = document.getElementById("copyMessage").classList;
-  const gotostep2 = document.getElementById("gotostep2").classList;
+  const message1 = document.getElementById("message1").classList;
   tableHead.innerHTML = "";
   tableBody.innerHTML = "";
-  copyMessage.add("d-none");
-  gotostep2.add("d-none");
+  message1.add("d-none");
 
   try {
     const domainInput = document.getElementById("domains").value; // Get input value
@@ -226,6 +219,9 @@ async function generatecnames(event) {
 
     // Destructure headers and data from response
     const { headers, data } = responseData;
+    message1.remove("d-none");
+
+    let cnames = new Map();
 
     // Create the header row
     const headerRow = document.createElement("tr");
@@ -255,12 +251,15 @@ async function generatecnames(event) {
 
       tableBody.appendChild(row);
     });
-    copyMessage.remove("d-none");
-    gotostep2.remove("d-none");
-
-    console.log("CNAMEs generated:", data);
+    data.forEach((row) => {
+      row.forEach((cell) => {
+        cnames.set(cell, row);
+      });
+    });
+    return cnames;
   } catch (error) {
     console.error("Error in generating CNAMES:", error);
+    return null;
   }
 }
 
@@ -288,6 +287,73 @@ function copyTextFromCell(text) {
 }
 
 // Attach event listener to the form to prevent reloading
+let cnames = null;
 document
   .getElementById("generatecnames")
-  .addEventListener("submit", generatecnames);
+  .addEventListener("submit", async function (event) {
+    cnames = await generatecnames(event); // Await the result of generatecnames
+    if (cnames) {
+      console.log("CNAMEs generated:", cnames); // Log CNAMEs if successfully generated
+    } else {
+      console.log("Failed to generate CNAMEs.");
+    }
+  });
+
+// gotostep2 function
+function gotostep2(event) {
+  event.preventDefault();
+  document.getElementById("generate-cname-tab").classList.remove("active");
+  document.getElementById("generate-cname").classList.remove("active");
+  document.getElementById("verify-cname-tab").classList.add("active");
+  document.getElementById("verify-cname").classList.add("active");
+}
+document.getElementById("gotostep2").addEventListener("click", gotostep2);
+
+// verifycnames function
+async function vercnames() {
+  const client = await Client.connect("raannakasturi/verifycname");
+  const result = await client.predict("/verify_cnames", {
+    i_domains: domainInput.value,
+    wildcard: wildcard.checked,
+  });
+  console.log(result);
+}
+
+async function verifycnames(event) {
+  const data = vercnames();
+
+  const tableHead = document.querySelector("#resultTable thead");
+  const tableBody = document.querySelector("#resultTable tbody");
+
+  // Create the header row
+  const headerRow = document.createElement("tr");
+  data.headers.forEach((header) => {
+    const th = document.createElement("th");
+    const h4 = document.createElement("h4");
+    h4.textContent = header;
+    th.appendChild(h4);
+    headerRow.appendChild(th);
+  });
+  tableHead.appendChild(headerRow);
+
+  // Populate the table body with data
+  data.data.forEach((rowData) => {
+    const row = document.createElement("tr");
+    rowData.forEach((cellData) => {
+      const td = document.createElement("td");
+      td.textContent = cellData;
+
+      // Add click event to copy content on click
+      td.addEventListener("click", () => {
+        navigator.clipboard
+          .writeText(cellData)
+          .then(() => alert("Copied to clipboard: " + cellData))
+          .catch((err) => console.error("Failed to copy: ", err));
+      });
+
+      row.appendChild(td);
+    });
+    tableBody.appendChild(row);
+  });
+}
+document.getElementById("verifycnames").addEventListener("click", verifycnames);
