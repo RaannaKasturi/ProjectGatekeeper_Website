@@ -15,6 +15,12 @@ const ecc384 = document.getElementById("ecc384");
 const buypass = document.getElementById("buypass");
 const providertocs = document.getElementById("providertocs");
 
+//reload page
+function reloadPage() {
+  location.reload();
+}
+document.getElementById("reset").addEventListener("click", reloadPage);
+
 // Key Type Select
 keyTypeSelect.addEventListener("change", function () {
   const selectedKeyType = this.value;
@@ -149,49 +155,6 @@ document.getElementById("valkeycurve").addEventListener("change", function () {
   }
 });
 
-// // order ssl
-// async function generate(event) {
-//   event.preventDefault(); // Prevent default form submission
-//   const domain = document.getElementById("valdomain").value;
-//   const email = document.getElementById("valemail").value;
-//   const keyType = document.getElementById("valkeytype").value;
-//   const keySize = document.getElementById("valkeysize").value;
-//   const keyCurve = document.getElementById("valkeycurve").value;
-//   const button = document.getElementById("generatebtn");
-//   const pvtkeydata = document.getElementById("privatekeydata");
-//   const csrdata = document.getElementById("csrdata");
-//   button.innerHTML =
-//     '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
-//   button.classList.add("disabled");
-//   button.classList.add("placeholder");
-//   button.classList.add("placeholder-wave");
-//   pvtkeydata.textContent = "Generating Private Key...";
-//   csrdata.textContent = "Generating CSR...";
-//   pvtkeydata.classList.add("placeholder");
-//   csrdata.classList.add("placeholder");
-//   pvtkeydata.classList.add("placeholder-wave");
-//   csrdata.classList.add("placeholder-wave");
-//   const client = await Client.connect("raannakasturi/generate-pvt-csr");
-//   const result = await client.predict("/privcsr", {
-//     domains_input: domain,
-//     email: email,
-//     key_type: keyType,
-//     key_size: keySize,
-//     key_curve: keyCurve,
-//   });
-//   pvtkeydata.textContent = result.data[0];
-//   csrdata.textContent = result.data[1];
-//   button.innerHTML = "Generate";
-//   button.classList.remove("disabled");
-//   button.classList.remove("placeholder");
-//   button.classList.remove("placeholder-wave");
-//   pvtkeydata.classList.remove("placeholder");
-//   csrdata.classList.remove("placeholder");
-//   pvtkeydata.classList.remove("placeholder-wave");
-//   csrdata.classList.remove("placeholder-wave");
-// }
-// document.getElementById("generate").addEventListener("submit", generate);
-
 async function get_cnames(domains) {
   const client = await Client.connect("raannakasturi/gencname");
   const result = await client.predict("/get_cnames", {
@@ -310,50 +273,90 @@ function gotostep2(event) {
 document.getElementById("gotostep2").addEventListener("click", gotostep2);
 
 // verifycnames function
-async function vercnames() {
+async function vercnames(domainInput) {
   const client = await Client.connect("raannakasturi/verifycname");
   const result = await client.predict("/verify_cnames", {
-    i_domains: domainInput.value,
+    i_domains: domainInput,
     wildcard: wildcard.checked,
   });
-  console.log(result);
+  return result;
 }
 
 async function verifycnames(event) {
-  const data = vercnames();
+  event.preventDefault();
+  document.getElementById("verifycnames").classList.add("disabled");
+  const tableHead = document.querySelector("#verifycname thead");
+  const tableBody = document.querySelector("#verifycname tbody");
+  const message2 = document.getElementById("message2").classList;
+  tableHead.innerHTML = "";
+  tableBody.innerHTML = "";
+  message2.add("d-none");
 
-  const tableHead = document.querySelector("#resultTable thead");
-  const tableBody = document.querySelector("#resultTable tbody");
+  try {
+    const domainInput = document.getElementById("domains").value;
+    const result = await vercnames(domainInput);
+    const responseData = result.data[0];
+    const { headers, data } = responseData;
+    message2.remove("d-none");
+    const headerRow = document.createElement("tr");
+    headers.forEach((header) => {
+      const th = document.createElement("th");
+      const h4 = document.createElement("h4");
+      h4.textContent = header;
+      th.appendChild(h4);
+      headerRow.appendChild(th);
+    });
+    tableHead.appendChild(headerRow);
+    data.forEach((rowData) => {
+      const row = document.createElement("tr");
+      const isVerified = rowData.includes("Verified");
+      row.classList.add(isVerified ? "table-success" : "table-danger");
+      if (!isVerified) {
+        document.getElementById("gotostep3").classList.add("disabled");
+      }
 
-  // Create the header row
-  const headerRow = document.createElement("tr");
-  data.headers.forEach((header) => {
-    const th = document.createElement("th");
-    const h4 = document.createElement("h4");
-    h4.textContent = header;
-    th.appendChild(h4);
-    headerRow.appendChild(th);
-  });
-  tableHead.appendChild(headerRow);
-
-  // Populate the table body with data
-  data.data.forEach((rowData) => {
-    const row = document.createElement("tr");
-    rowData.forEach((cellData) => {
-      const td = document.createElement("td");
-      td.textContent = cellData;
-
-      // Add click event to copy content on click
-      td.addEventListener("click", () => {
-        navigator.clipboard
-          .writeText(cellData)
-          .then(() => alert("Copied to clipboard: " + cellData))
-          .catch((err) => console.error("Failed to copy: ", err));
+      rowData.forEach((cellData) => {
+        const td = document.createElement("td");
+        td.textContent = cellData;
+        td.style.cursor = "pointer";
+        td.addEventListener("click", () => copyTextFromCell(cellData));
+        row.appendChild(td);
       });
 
-      row.appendChild(td);
+      tableBody.appendChild(row);
     });
-    tableBody.appendChild(row);
-  });
+  } catch (error) {
+    console.error("Error in generating CNAMES:", error);
+    return null;
+  }
 }
 document.getElementById("verifycnames").addEventListener("click", verifycnames);
+
+// gotostep3 function
+function gotostep3(event) {
+  event.preventDefault();
+  document.getElementById("verify-cname-tab").classList.remove("active");
+  document.getElementById("verify-cname").classList.remove("active");
+  document.getElementById("order-ssl-tab").classList.add("active");
+  document.getElementById("order-ssl").classList.add("active");
+}
+document.getElementById("gotostep3").addEventListener("click", gotostep3);
+
+// Function to generate SSL order
+async function generatessl(event) {
+  event.preventDefault();
+  console.log("Generating SSL order...");
+  // domains, wildcard, email, keyType, keySize, keyCurve, provider
+  const client = await Client.connect("raannakasturi/orderSSL");
+  const result = await client.predict("/gen_ssl", {
+    i_domains: "thenayankasturi.eu.org",
+    wildcard: true,
+    email: "raannakasturi@gmail.com",
+    ca_server: "Let's Encrypt (Testing)",
+    key_type: "ecc",
+    key_size: "2048",
+    key_curve: "SECP256R1",
+  });
+  console.log(result);
+}
+document.getElementById("orderssl").addEventListener("click", generatessl);

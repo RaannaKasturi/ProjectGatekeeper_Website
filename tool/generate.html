@@ -211,20 +211,23 @@
                             placeholder="Private key will be displayed here." readonly></textarea>
                         <div class="col-12 mt-3 d-flex justify-content-center gap-5">
                             <button class="btn btn-clipboard btn-outline-primary copy"
-                                data-clipboard-target="#privatekeydata" onclick="copyText('privatekeydata')">Copy
-                                Private Key</button>
-                            <button class="btn btn-primary" onclick="downloadText('privatekey.key')">Download
-                                Private Key</button>
+                                onclick="copyText('privatekeydata', event)">Copy Private Key</button>
+                            <button class="btn btn-primary"
+                                onclick="downloadText('privatekeydata', 'privatekey.key', event)">
+                                Download Private Key
+                            </button>
                         </div>
                     </div>
+
                     <div class="col-12 col-lg-6 mt-3 px-2">
                         <label for="csrdata" class="form-label">CSR</label>
                         <textarea class="form-control" id="csrdata" name="csrdata" rows="10"
                             placeholder="CSR will be displayed here." readonly></textarea>
                         <div class="col-12 mt-3 d-flex justify-content-center gap-5">
                             <button class="btn btn-clipboard btn-outline-primary copy" data-clipboard-target="#csrdata"
-                                onclick="copyText('csrdata')">Copy CSR</button>
-                            <button class="btn btn-primary" onclick="downloadText('csr.pem')">Download CSR</button>
+                                onclick="copyText('csrdata', event)">Copy CSR</button>
+                            <button class="btn btn-primary" onclick="downloadText('csrdata', 'csr.pem', event)">Download
+                                CSR</button>
                         </div>
                     </div>
                 </div>

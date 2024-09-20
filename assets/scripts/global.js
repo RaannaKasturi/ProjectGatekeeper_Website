@@ -40,8 +40,11 @@ function backToTop() {
   document.documentElement.scrollTop = 0;
 }
 
-// Copy function using Clipboard API
-function copyText(copyId) {
+// Function to copy the text to clipboard
+function copyText(copyId, event) {
+  event.preventDefault();
+  event.stopPropagation();
+
   const textArea = document.getElementById(copyId);
   if (navigator.clipboard) {
     navigator.clipboard
@@ -59,12 +62,19 @@ function copyText(copyId) {
   }
 }
 
-// Download function
-function downloadText(filename) {
-  const textArea = document.getElementById("csrdata").value;
-  const blob = new Blob([textArea], { type: "text/plain" });
+// Function to download the content as a file
+function downloadText(textId, fileName, event) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  const textArea = document.getElementById(textId);
+  const blob = new Blob([textArea.value], { type: "text/plain" });
   const link = document.createElement("a");
-  link.href = window.URL.createObjectURL(blob);
-  link.download = filename;
+
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
   link.click();
+
+  // Clean up the object URL
+  URL.revokeObjectURL(link.href);
 }
