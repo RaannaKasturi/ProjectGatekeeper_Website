@@ -347,17 +347,38 @@ document.getElementById("gotostep3").addEventListener("click", gotostep3);
 async function generatessl(event) {
   event.preventDefault();
   console.log("Generating SSL order...");
-  // domains, wildcard, email, keyType, keySize, keyCurve, provider
+
+  const keyzsize = document.getElementById("valkeysize");
+  const privatekeydata = document.getElementById("privatekeydata");
+  const csrdata = document.getElementById("csrdata");
+  const ssldata = document.getElementById("ssldata");
+  const emailstatus = document.getElementById("emailstatus");
+
+  privatekeydata.classList.add("placeholder", "placeholder-wave");
+  csrdata.classList.add("placeholder", "placeholder-wave");
+  ssldata.classList.add("placeholder", "placeholder-wave");
+  emailstatus.classList.add("placeholder", "placeholder-wave");
+
   const client = await Client.connect("raannakasturi/orderSSL");
   const result = await client.predict("/gen_ssl", {
-    i_domains: "thenayankasturi.eu.org",
-    wildcard: true,
-    email: "raannakasturi@gmail.com",
-    ca_server: "Let's Encrypt (Testing)",
-    key_type: "ecc",
-    key_size: "2048",
-    key_curve: "SECP256R1",
+    i_domains: domainInput.value,
+    wildcard: wildcard.checked,
+    email: emailInput.value,
+    ca_server: provider.value,
+    key_type: keyTypeSelect.value,
+    key_size: keyzsize.value,
+    key_curve: keycurve.value,
   });
   console.log(result);
+
+  privatekeydata.value = result.data[0];
+  csrdata.value = result.data[1];
+  ssldata.value = result.data[2];
+  emailstatus.value = result.data[3];
+
+  privatekeydata.classList.remove("placeholder", "placeholder-wave");
+  csrdata.classList.remove("placeholder", "placeholder-wave");
+  ssldata.classList.remove("placeholder", "placeholder-wave");
+  emailstatus.classList.remove("placeholder", "placeholder-wave");
 }
 document.getElementById("orderssl").addEventListener("click", generatessl);
