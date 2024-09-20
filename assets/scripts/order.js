@@ -266,6 +266,7 @@ document
 function gotostep2(event) {
   event.preventDefault();
   document.getElementById("generate-cname-tab").classList.remove("active");
+  document.getElementById("generate-cname-tab").classList.add("disabled");
   document.getElementById("generate-cname").classList.remove("active");
   document.getElementById("verify-cname-tab").classList.add("active");
   document.getElementById("verify-cname").classList.add("active");
@@ -314,7 +315,6 @@ async function verifycnames(event) {
       if (!isVerified) {
         document.getElementById("gotostep3").classList.add("disabled");
       }
-
       rowData.forEach((cellData) => {
         const td = document.createElement("td");
         td.textContent = cellData;
@@ -336,6 +336,7 @@ document.getElementById("verifycnames").addEventListener("click", verifycnames);
 function gotostep3(event) {
   event.preventDefault();
   document.getElementById("verify-cname-tab").classList.remove("active");
+  document.getElementById("verify-cname-tab").classList.add("disabled");
   document.getElementById("verify-cname").classList.remove("active");
   document.getElementById("order-ssl-tab").classList.add("active");
   document.getElementById("order-ssl").classList.add("active");

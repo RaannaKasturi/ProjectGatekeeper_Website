@@ -78,3 +78,14 @@ function downloadText(textId, fileName, event) {
   // Clean up the object URL
   URL.revokeObjectURL(link.href);
 }
+
+// reset data
+document.addEventListener("DOMContentLoaded", (event) => {
+  const resetButtons = document.querySelectorAll('button[type="reset"]');
+
+  resetButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      window.location.reload();
+    });
+  });
+});

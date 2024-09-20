@@ -135,22 +135,21 @@
                     <p>Order Professional SSL Certificate from top SSL Providers like Let's Encrypt, Google Trust,
                         SSL.com, BuySSL, etc.</p>
                 </div>
-                <div class="mt-auto d-flex row">
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <div class="mt-auto d-flex row mx-5">
+                    <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="generate-cname-tab" data-bs-toggle="tab"
-                                data-bs-target="#generate-cname" type="button" role="tab">Get CNAMES</button>
+                                data-bs-target="#generate-cname" type="button" role="tab">Step 1: Get CNAMES</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="verify-cname-tab" data-bs-toggle="tab" href="#verify-cname"
-                                role="tab" aria-controls="verify-cname" aria-selected="false">Verify CNAME</a>
+                            <a class="nav-link disabled" id="verify-cname-tab" data-bs-toggle="tab" href="#verify-cname"
+                                role="tab" aria-controls="verify-cname" aria-selected="false">Step 2: Verify CNAME</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="order-ssl-tab" data-bs-toggle="tab" data-bs-target="#order-ssl"
-                                type="button" role="tab">Order SSL</button>
+                            <button class="nav-link disabled" id="order-ssl-tab" data-bs-toggle="tab"
+                                data-bs-target="#order-ssl" type="button" role="tab">Step 3: Order SSL</button>
                         </li>
                     </ul>
-
                     <div class="tab-content">
                         <!-- Generate CNAMEs -->
                         <div class="tab-pane active" id="generate-cname" role="tabpanel">
@@ -289,7 +288,8 @@
                                 <div class="row my-5 py-3">
                                     <h2 class="text-center">STEP 2: Verify CNAME Records</h2>
                                 </div>
-                                <div class="d-flex justify-content-center">
+                                <div class="d-flex justify-content-center col gap-5">
+                                    <button type="reset" class="btn btn-outline-primary">Reset Process</button>
                                     <button class="btn btn-primary" id="verifycnames">Verify CNAME Records
                                         &nbsp;</button>
                                 </div>
@@ -303,10 +303,8 @@
                                     Please check if all the records are verified or not. If not, please wait for some
                                     time.<br>Based on your DNS, Domain & Hosting Provider, it can take somewhere between
                                     5 minutes to 48 hours.</p>
-                                <div>
-                                    <button class="btn btn-primary" id="gotostep3">Go to STEP 3 &nbsp;<i
-                                            class="bi bi-arrow-right"></i></button>
-                                </div>
+                                <button class="btn btn-primary mt-5" id="gotostep3">Go to STEP 3 &nbsp;<i
+                                        class="bi bi-arrow-right"></i></button>
                             </div>
                             <!-- Separator -->
                             <div
