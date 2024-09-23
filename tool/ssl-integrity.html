@@ -133,8 +133,8 @@
                     <p>Use the SSL Checker to troubleshoot common SSL Certificate installation problems on your server
                         including verifying that the correct certificate is installed, valid, and properly trusted.</p>
                 </div>
-                <div class="mt-auto">
-                    <form class="row g-3" id="pkcsr-form">
+                <div class="mt-auto mb-5">
+                    <form class="row g-3" id="ssl-integrity">
                         <div class="row m-0">
                             <div class="input-group mb-3 d-flex gap-2 justify-content-center">
                                 <div class="col-8">
@@ -151,10 +151,32 @@
                             </div>
                             <div class="d-flex justify-content-center gap-3">
                                 <button type="reset" class="btn btn-outline-primary">Reset Form</button>
-                                <button type="submit" class="btn btn-primary">Check SSL Integrity</button>
+                                <button type="submit" class="btn btn-primary" id="checkssl">Check SSL Integrity</button>
                             </div>
                         </div>
                     </form>
+                </div>
+                <!-- output -->
+                <div class="d-flex text-center row my-5">
+                    <h3 id="title" class="mt-5">Status for thenayankasturi.eu.org</h3>
+                    <input type="text" class="form-control text-center" id="status" readonly>
+                </div>
+                <div class="d-flex row justify-content-center mx-4 d-none" id="outputdata">
+                    <table class="table caption-top">
+                        <caption class="text-center">SSL Checker Result</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col" class="h4">Attribute</th>
+                                <th scope="col" class="h4">Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ssl-result-table">
+                            <!-- Data will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Separator -->
+                <div class="spacer">
                 </div>
             </div>
         </div>
@@ -343,7 +365,7 @@
         </div>
     </footer>
     <!-- Scripts -->
-    <script src="/assets/scripts/ssl-integrity.js"></script>
+    <script type="module" src="/assets/scripts/ssl-integrity.js"></script>
     <script src="/assets/scripts/global.js"></script>
     <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
