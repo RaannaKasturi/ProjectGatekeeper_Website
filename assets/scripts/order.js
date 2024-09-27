@@ -15,6 +15,8 @@ const ecc384 = document.getElementById("ecc384");
 const buypass = document.getElementById("buypass");
 const providertocs = document.getElementById("providertocs");
 
+console.log(providertocs.innerHTML);
+
 //reload page
 function reloadPage() {
   location.reload();
@@ -125,6 +127,19 @@ provider.addEventListener("change", function () {
     removeecc(); // Disable options for BuyPass provider
   } else {
     enableecc(); // Enable options for other providers
+  }
+});
+
+// change TOCs wrt provider
+provider.addEventListener("change", function () {
+  if (this.value === "Let's Encrypt") {
+    providertocs.innerHTML = `I have read and agreed to Let's Encrypt's terms and conditions.*<a href="https://letsencrypt.org/documents/LE-SA-v1.4-April-3-2024.pdf" target="_blank" id="providertocs" rel="noopener noreferrer"><br>View Terms & Conditions</a>`;
+  } else if (this.value === "Google") {
+    providertocs.innerHTML = `I have read and agreed to Google Trust's terms and conditions.*<a href="https://pki.goog/GTS-SA.pdf" target="_blank" id="providertocs" rel="noopener noreferrer"><br>View Terms & Conditions</a>`;
+  } else if (this.value === "Buypass") {
+    providertocs.innerHTML = `I have read and agreed to BuyPass' terms and conditions.*<a href="https://api.buypass.com/acme/terms/1061" target="_blank" id="providertocs" rel="noopener noreferrer"><br>View Terms & Conditions</a>`;
+  } else {
+    providertocs.innerHTML = `I have read and agreed to Let's Encrypt's terms and conditions.*<a href="https://letsencrypt.org/documents/LE-SA-v1.4-April-3-2024.pdf" target="_blank" id="providertocs" rel="noopener noreferrer"><br>View Terms & Conditions</a>`;
   }
 });
 
